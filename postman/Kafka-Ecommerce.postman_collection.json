@@ -1,0 +1,60 @@
+{
+  "info": {
+    "name": "Kafka E-Commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "userId", "value": "replace-after-create" },
+    { "key": "orderId", "value": "replace-after-create" },
+    { "key": "paymentId", "value": "replace-after-payment" }
+  ],
+  "item": [
+    {
+      "name": "Create user",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"email\":\"alex@example.com\",\"fullName\":\"Alex Example\"}" },
+        "url": "http://localhost:8081/users"
+      }
+    },
+    {
+      "name": "Set product stock",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"availableStock\":10}" },
+        "url": "http://localhost:8083/inventory/demo-sku/stock"
+      }
+    },
+    {
+      "name": "Create order (success)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"userId\":\"{{userId}}\",\"productId\":\"demo-sku\",\"quantity\":1,\"amount\":19.99,\"currency\":\"USD\",\"simulatePaymentFailure\":false}" },
+        "url": "http://localhost:8082/orders"
+      }
+    },
+    {
+      "name": "Get order",
+      "request": { "method": "GET", "url": "http://localhost:8082/orders/{{orderId}}" }
+    },
+    {
+      "name": "Cancel order",
+      "request": { "method": "POST", "url": "http://localhost:8082/orders/{{orderId}}/cancel" }
+    },
+    {
+      "name": "Get inventory",
+      "request": { "method": "GET", "url": "http://localhost:8083/inventory/demo-sku" }
+    },
+    {
+      "name": "Get payment",
+      "request": { "method": "GET", "url": "http://localhost:8084/payments/{{paymentId}}" }
+    },
+    {
+      "name": "Refund payment",
+      "request": { "method": "POST", "url": "http://localhost:8084/payments/{{paymentId}}/refund" }
+    }
+  ]
+}
